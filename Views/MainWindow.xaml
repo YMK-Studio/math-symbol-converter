@@ -1,0 +1,110 @@
+﻿<Window
+    x:Class="MathSymbolConverter.Views.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MathSymbolConverter.Converters"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:tb="http://www.hardcodet.net/taskbar"
+    Title="{Binding Title}"
+    Width="250"
+    Height="250"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    Icon="pack://application:,,,/Resources/Alpha_uc_lc.ico"
+    ResizeMode="CanMinimize"
+    ShowInTaskbar="{Binding ShowInTaskbar}"
+    WindowState="{Binding WindowState}">
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <prism:InvokeCommandAction Command="{Binding CloseMainWindowCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Window.Resources>
+        <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+    </Window.Resources>
+    <DockPanel>
+        <DockPanel.Resources>
+            <Image
+                x:Key="off_img"
+                Source="pack://application:,,,/Resources/night.png"
+                Stretch="UniformToFill" />
+            <Image
+                x:Key="on_img"
+                Source="pack://application:,,,/Resources/day.png"
+                Stretch="UniformToFill" />
+        </DockPanel.Resources>
+        <DockPanel.Style>
+            <Style TargetType="{x:Type DockPanel}">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding ElementName=StartMacroButton, Path=IsEnabled}" Value="False">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <VisualBrush Stretch="UniformToFill" Visual="{DynamicResource on_img}" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding ElementName=StartMacroButton, Path=IsEnabled}" Value="True">
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <VisualBrush Stretch="UniformToFill" Visual="{DynamicResource off_img}" />
+                            </Setter.Value>
+                        </Setter>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </DockPanel.Style>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="_Menu">
+                <MenuItem Command="{Binding ShowSettingsDialogCommand}" Header="_Settings" />
+                <!--<MenuItem Command="{Binding ShowInfoMessageBoxCommand}" Header="_About" />-->
+                <MenuItem Command="{Binding LinkToGithubCommand}" Header="_Visit GitHub" />
+                <Separator />
+                <MenuItem Command="{Binding CloseMainWindowCommand}" Header="_Quit" />
+            </MenuItem>
+        </Menu>
+        <tb:TaskbarIcon
+            IconSource="/MathSymbolConverter;component/Resources/Alpha_uc_lc.ico"
+            LeftClickCommand="{Binding SetMainWindowToNormalStateCommand}"
+            MenuActivation="RightClick"
+            ToolTipText="{Binding TooltipText}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu HorizontalOffset="-500" VerticalOffset="0">
+                    <MenuItem Command="{Binding SetMainWindowToNormalStateCommand}" Header="_Show Main Window" />
+                    <Separator />
+                    <MenuItem
+                        Command="{Binding StartHookingCommand}"
+                        Header="_Start Macro"
+                        IsEnabled="{Binding IsHookingEnabled, Mode=OneWay}" />
+                    <MenuItem
+                        Command="{Binding StopHookingCommand}"
+                        Header="_Stop Macro"
+                        IsEnabled="{Binding IsHookingEnabled, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}" />
+                    <Separator />
+                    <MenuItem Command="{Binding CloseMainWindowCommand}" Header="_Quit" />
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+        <StackPanel
+            Margin="15"
+            VerticalAlignment="Center"
+            Orientation="Vertical">
+            <Button
+                x:Name="StartMacroButton"
+                Height="50"
+                Margin="5"
+                Command="{Binding StartHookingCommand}"
+                Content="Start Macro"
+                Focusable="False"
+                IsEnabled="{Binding IsHookingEnabled, Mode=OneWay}"
+                Opacity="0.925" />
+            <Button
+                Height="50"
+                Margin="5"
+                Command="{Binding StopHookingCommand}"
+                Content="Stop Macro"
+                Focusable="False"
+                IsEnabled="{Binding IsHookingEnabled, Mode=OneWay, Converter={StaticResource InverseBoolConverter}}"
+                Opacity="0.925" />
+        </StackPanel>
+    </DockPanel>
+</Window>

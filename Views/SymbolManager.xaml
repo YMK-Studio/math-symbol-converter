@@ -1,0 +1,59 @@
+﻿<Window
+    x:Class="MathSymbolConverter.Views.SymbolManager"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="clr-namespace:MathSymbolConverter.Converters"
+    xmlns:gif="http://wpfanimatedgif.codeplex.com"
+    xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+    xmlns:prism="http://prismlibrary.com/"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+    Title="Macro Manager"
+    prism:ViewModelLocator.AutoWireViewModel="True"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    ShowInTaskbar="False"
+    WindowState="Maximized"
+    WindowStyle="None">
+    <Window.Resources>
+        <converters:ResourceNameToPathConverter x:Key="ResourceNameToPathConverter" />
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <converters:StringToDoubleConverter x:Key="StringToDoubleConverter" />
+    </Window.Resources>
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Closing">
+            <prism:InvokeCommandAction Command="{Binding CloseSymbolManagerCommand}" />
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Canvas Visibility="{Binding ShowsPopupWindow, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Label
+            Canvas.Left="{Binding PopupLocation.X}"
+            Canvas.Top="{Binding PopupLocation.Y}"
+            Width="{Binding PopupWidth}"
+            Height="{Binding Width, RelativeSource={RelativeSource Self}}"
+            Padding="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            HorizontalContentAlignment="Center"
+            VerticalContentAlignment="Center"
+            Opacity="{Binding PopupOpacity}">
+
+            <TextBlock
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="{Binding PopupSize}"
+                Foreground="{Binding PopupColor}"
+                Text="{Binding PopupName}" />
+        </Label>
+
+        <!--<Image
+            x:Name="PopupImage"
+            Canvas.Left="{Binding PopupLocation.X}"
+            Canvas.Top="{Binding PopupLocation.Y}"
+            Width="{Binding PopupSize}"
+            Height="{Binding Width, RelativeSource={RelativeSource Self}}"
+            gif:ImageBehavior.AnimatedSource="{Binding PopupFileName, Converter={StaticResource ResourceNameToPathConverter}}"
+            Opacity="{Binding PopupOpacity}"
+            Visibility="{Binding IsPopupActive, Converter={StaticResource BoolToVisibilityConverter}}" />-->
+    </Canvas>
+</Window>
