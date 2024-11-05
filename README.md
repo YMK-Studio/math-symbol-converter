@@ -1,6 +1,6 @@
 # 𝐀𝛂 Math Symbol Converter
 
-Math Symbol Converter is a keyboard macro program that allows you to quickly convert various mathematical symbols using familiar aliases, many of which are LaTeX-based. Users can type a backslash (`\`) followed by the alias of a symbol and press the `TAB` key to convert it into the corresponding symbol.
+Math Symbol Converter is a keyboard macro program that allows you to quickly convert various mathematical symbols using familiar aliases, many of which are LaTeX-based. You can type a backslash (`\`) followed by the alias of a symbol and press the `TAB` key to convert it into the corresponding symbol.
 
 <img src="https://github.com/user-attachments/assets/231bafd4-c73f-4ad4-be1e-671b6aece353">
 
